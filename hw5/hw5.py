@@ -37,10 +37,10 @@ def processTrips(pid, records):
             d = geom.Point(proj(float(row[9]), float(row[10])))
             zone = findZone(p, index, zones)
             zone2 = findZone(d, index2, zones2)        
-            if zone and zone2:
-                yield((zone,zone2),1)
         except:
             continue
+        if zone and zone2:
+            yield((zone,zone2),1)
 
 if __name__ == "__main__":
     sc = SparkContext()
