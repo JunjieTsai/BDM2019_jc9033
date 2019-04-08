@@ -41,21 +41,23 @@ def processTrips(pid, records):
             continue
         if zone and zone2:
             yield((zone,zone2),1)
+            
+def IndexToName(x):
+    import geopandas as gpd
+    zones = gpd.read_file('neighborhoods.geojson')
+    return zones['neighborhood'][x]
 
 if __name__ == "__main__":
     sc = SparkContext()
-
-    rdd = sc.textFile('hdfs:///tmp/bdm/yellow_tripdata_2011-05.csv')
+    
+    rdd = sc.textFile('yellow.csv')
     counts = rdd.mapPartitionsWithIndex(processTrips)\
             .reduceByKey(lambda x,y: x+y) \
+            .map(lambda x: (x[0][1], (x[1], x[0][0])))\
+            .groupByKey()\
+            .map(lambda x: (x[0], sorted(x[1], reverse=True)[:3]))\
+            .map(lambda x: (x[0], [IndexToName(x[1][i][1]) for i in range(3)]))\
             .collect()
-
-    import geopandas as gpd
-    gpd = gpd.read_file('hdfs:///tmp/bdm/neighborhoods.geojson')
-    neighborhoods = gpd['neighborhood']
-    boroughs_unique = gpd['borough'].unique()
-
-    for i in boroughs_unique:
-        print(i)
-        output = list(map(lambda x: neighborhoods[x[0][0]], sorted(filter(lambda x: x[0][1]==i, counts), key=lambda x:x[1], reverse=True)[:3]))
-        print(output[0], ",",output[1], ", and",output[2], "are the top 3 origin neighborhood for trips ending up in", i)
+    
+    for i in range(len(counts)):
+        print(counts[i][1][0], ",",counts[i][1][1], ", and", counts[i][1][2], "are the top 3 origin neighborhood for trips ending up in", counts[i][0])
