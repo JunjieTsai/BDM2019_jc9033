@@ -51,7 +51,7 @@ if __name__ == "__main__":
             .collect()
 
     import geopandas as gpd
-    gpd = gpd.read_file('neighborhoods.geojson')
+    gpd = gpd.read_file('hdfs:///tmp/bdm/neighborhoods.geojson')
     neighborhoods = gpd['neighborhood']
     boroughs_unique = gpd['borough'].unique()
 
