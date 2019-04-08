@@ -50,7 +50,7 @@ def IndexToName(x):
 if __name__ == "__main__":
     sc = SparkContext()
     
-    rdd = sc.textFile('yellow.csv')
+    rdd = sc.textFile('hdfs:///tmp/bdm/yellow_tripdata_2011-05.csv')
     counts = rdd.mapPartitionsWithIndex(processTrips)\
             .reduceByKey(lambda x,y: x+y) \
             .map(lambda x: (x[0][1], (x[1], x[0][0])))\
