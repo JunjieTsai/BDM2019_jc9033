@@ -38,10 +38,9 @@ def processTrips(pid, records):
             zone = findZone(p, index, zones)
             zone2 = findZone(d, index2, zones2)        
             if zone and zone2:
-                counts[(zone,zone2)] = counts.get((zone,zone2), 0) + 1
+                yield((zone,zone2),1)
         except:
             continue
-    return counts.items()
 
 if __name__ == "__main__":
     sc = SparkContext()
