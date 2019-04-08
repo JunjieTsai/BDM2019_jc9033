@@ -23,8 +23,7 @@ def processTrips(pid, records):
     import shapely.geometry as geom
     
     proj = pyproj.Proj(init="epsg:2263", preserve_units=True)    
-    index, zones = createIndex('neighborhoods.geojson')    
-    index2, zones2 = createIndex('boroughs.geojson')
+    index, zones = createIndex('neighborhoods.geojson')
     
     if pid==0:
         next(records)
@@ -36,7 +35,8 @@ def processTrips(pid, records):
             p = geom.Point(proj(float(row[5]), float(row[6])))
             d = geom.Point(proj(float(row[9]), float(row[10])))
             zone = findZone(p, index, zones)
-            zone2 = findZone(d, index2, zones2)        
+            zone2 = findZone(d, index, zones)
+            zone2 = zones['borough'][zone2]
         except:
             continue
         if zone and zone2:
