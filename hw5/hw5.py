@@ -51,10 +51,11 @@ if __name__ == "__main__":
             .collect()
 
     import geopandas as gpd
-    neighborhoods = gpd.read_file('neighborhoods.geojson')['neighborhood']
-    boroughs = gpd.read_file('boroughs.geojson')['boroname']
+    gpd = gpd.read_file('neighborhoods.geojson')
+    neighborhoods = gpd['neighborhood']
+    boroughs_unique = gpd['borough'].unique()
 
-    for i in range(5):        
-        print(boroughs[i])
+    for i in boroughs_unique:
+        print(i)
         output = list(map(lambda x: neighborhoods[x[0][0]], sorted(filter(lambda x: x[0][1]==i, counts), key=lambda x:x[1], reverse=True)[:3]))
-        print(output)
+        print(output[0], ",",output[1], ", and",output[2], "are the top 3 origin neighborhood for trips ending up in", i)
