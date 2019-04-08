@@ -46,7 +46,7 @@ def processTrips(pid, records):
 if __name__ == "__main__":
     sc = SparkContext()
 
-    rdd = sc.textFile('hdfs:///tmp/bdm/yellow_tripdata_2011-05.csv.gz')
+    rdd = sc.textFile('hdfs:///tmp/bdm/yellow_tripdata_2011-05.csv')
     counts = rdd.mapPartitionsWithIndex(processTrips)\
             .reduceByKey(lambda x,y: x+y) \
             .collect()
