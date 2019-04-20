@@ -2,7 +2,6 @@ from pyspark import SparkContext
 
 def createIndex(shapefile):
     import rtree
-    import fiona.crs
     import geopandas as gpd
     zones = gpd.read_file(shapefile)
     index = rtree.Rtree()
