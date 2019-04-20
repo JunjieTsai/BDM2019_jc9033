@@ -19,7 +19,7 @@ def findZone(p, index, zones):
 
 def FindDrugKeywords(tweet, drug_keywords):
     import string
-    tweet = tweet.lower() # lowercase
+    tweet = tweet.lower().encode('ascii', 'ignore').decode('ascii') # lowercase # remove emoji
     translator = str.maketrans(string.punctuation, ' '*len(string.punctuation)) # remove punctuations
     tweet_WOpunctuation = tweet.translate(translator) # remove punctuations
     tweet_refined = " " + ' '.join(tweet_WOpunctuation.split()) + " " # recombine
