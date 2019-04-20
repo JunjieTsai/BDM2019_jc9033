@@ -27,7 +27,6 @@ def FindDrugKeywords(tweet, drug_keywords):
 
 def mapper1(pid, records):
     import csv
-    import pyproj
     import shapely.geometry as geom    
 
     drug_illegal = list(map(lambda x: " " + x.strip().lower() + " ", open("drug_illegal.txt", "r").readlines()))
