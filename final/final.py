@@ -1,3 +1,5 @@
+from pyspark import SparkContext
+
 def createIndex(shapefile):
     import rtree
     import fiona.crs
@@ -43,12 +45,15 @@ def mapper1(pid, records):
                 point = geom.Point(float(row[2]), float(row[1]))
                 zone = findZone(point, index, zones)
             except:
-                yield("error!", 1)
                 continue
             if zone:
                 yield(zones['plctract10'][zone],1/zones['plctrpop10'][zone])
-                
-rdd = sc.textFile('tweets.csv')
-counts = rdd.mapPartitionsWithIndex(mapper1)\
-            .groupByKey().mapValues(sum)\
-            .sortByKey() 
+
+if __name__ == "__main__":
+    sc = SparkContext()
+    rdd = sc.textFile('hdfs:///tmp/bdm/tweets-100m.csv')
+    counts = rdd.mapPartitionsWithIndex(mapper1)\
+                .groupByKey().mapValues(sum)\
+                .sortByKey()\
+                .collect()
+    print(counts[:10])          
