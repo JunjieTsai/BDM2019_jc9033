@@ -53,4 +53,4 @@ if __name__ == "__main__":
     counts = rdd.mapPartitionsWithIndex(mapper1)\
                 .groupByKey().mapValues(sum)\
                 .sortByKey()
-    rdd.coalesce(1).saveAsTextFile("final_results")
+    counts.coalesce(1).saveAsTextFile("final_results")
