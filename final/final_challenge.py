@@ -52,5 +52,5 @@ if __name__ == "__main__":
     rdd = sc.textFile('hdfs:///tmp/bdm/tweets-100m.csv')
     counts = rdd.mapPartitionsWithIndex(mapper1)\
                 .groupByKey().mapValues(sum)\
-                .sortByKey()\
-                .collect()
+                .sortByKey()
+    rdd.coalesce(1).saveAsTextFile("final_results")
