@@ -51,7 +51,7 @@ if __name__ == "__main__":
     sc = SparkContext()
     rdd = sc.textFile('hdfs:///tmp/bdm/tweets-100m.csv')
     counts = rdd.mapPartitionsWithIndex(mapper1)\
-                .reduceByKey(lambda x,y: x+y)\
+                .groupByKey().mapValues(sum)\
                 .sortByKey()\
                 .collect()
     print(counts[:10])          
