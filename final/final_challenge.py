@@ -54,4 +54,3 @@ if __name__ == "__main__":
                 .groupByKey().mapValues(sum)\
                 .sortByKey()\
                 .collect()
-    print(counts[:10])          
